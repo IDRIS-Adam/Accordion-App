@@ -25,28 +25,53 @@ function App() {
 }
 
 function Accordion({ data }) {
+  const [curOpen, setCurOpen] = useState(2);
+
   return (
     <div className="accordion">
       {data.map((el, i) => (
-        <AccordionItem title={el.title} text={el.text} num={i} key={el.title} />
+        <AccordionItem
+          title={el.title}
+          num={i}
+          key={el.title}
+          curOpen={curOpen}
+          onOpen={setCurOpen}
+        >
+          text={el.text}
+        </AccordionItem>
       ))}
+      <AccordionItem
+        title="test 1"
+        num={22}
+        key="test 1"
+        curOpen={curOpen}
+        onOpen={setCurOpen}
+      >
+        <p>Allows react developpers to :</p>
+        <ul>
+          <li>Ubuntu's emoji input can depend on your keyboar</li>
+          <li>method and desktop environment. If you're using</li>
+          <li>standard Ubuntu 24.04 GNOME, I can show you how emoji picker</li>
+          <li>can use it anywhere in Code.</li>
+        </ul>
+      </AccordionItem>
     </div>
   );
 }
 
-function AccordionItem({ num, title, text }) {
-  const [isOpen, setIsOpen] = useState(false);
+function AccordionItem({ num, title, curOpen, onOpen, children }) {
+  const isOpen = num === curOpen;
 
   function handleToggle() {
-    setIsOpen((el) => !isOpen);
+    onOpen(num);
   }
 
   return (
-    <div className={`item ${isOpen ? "open" : ""}` } onClick={handleToggle}>
+    <div className={`item ${isOpen ? "open" : ""}`} onClick={handleToggle}>
       <p className="number">{num < 9 ? `0${num + 1}` : num + 1}</p>
       <p className="text">{title}</p>
       <p className="icon">{isOpen ? "-" : "+"}</p>
-      {isOpen && <div className="content-box">{text}</div>}
+      {isOpen && <div className="content-box">{children}</div>}
     </div>
   );
 }
